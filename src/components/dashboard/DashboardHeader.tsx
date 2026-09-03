@@ -53,7 +53,7 @@ export default function DashboardHeader({ collapsed, onToggleSidebar }: Readonly
     }
 
     return (<>
-        <header className={`flex justify-between items-center px-4 h-16 z-500 bg-sidebar shadow-xs backdrop-blur-md full-width top-0 sticky border-border border-b transition-[margin] duration-200 ${collapsed ? " sm:ml-18" : "sm:ml-64"}`}>
+        <header className={`flex justify-between items-center px-4 h-16 z-[60] bg-sidebar shadow-xs backdrop-blur-md full-width top-0 sticky border-border border-b transition-[margin] duration-200 ${collapsed ? " sm:ml-18" : "sm:ml-64"}`}>
             <div className="relative z-10 flex items-center flex-1 max-w-xl">
                 <Button
                     data-sidebar-toggle="true"

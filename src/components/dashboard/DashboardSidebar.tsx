@@ -62,9 +62,8 @@ export default function DashboardSidebar({
             }
 
             // Close sidebar when clicking outside
-            if (!collapsed) {
-                onClose()
-            }
+            if (temporarilyExpanded) onTemporaryCollapse()
+            if (!collapsed) onClose()
         }
 
         document.addEventListener("click", handleOutsideClick)
@@ -85,7 +84,7 @@ export default function DashboardSidebar({
             onBlurCapture={(event) => {
                 if (!event.currentTarget.contains(event.relatedTarget as Node | null)) closeTemporarily()
             }}
-            className={`flex flex-col gap-2 p-2 sm:p-4 fixed left-0 top-0 bottom-0 z-[50] bg-sidebar shadow-sm backdrop-blur-xl border-r border-border font-manrope text-sm transition-[width] duration-200 ${expanded ? "w-64" : "hidden sm:w-20 sm:block"}`}
+            className={`flex flex-col gap-2 p-2 sm:p-4 fixed left-0 top-0 bottom-0 z-500 bg-sidebar shadow-sm backdrop-blur-xl border-r border-border font-manrope text-sm transition-[width] duration-200 ${expanded ? "w-64" : "hidden sm:w-20 sm:block"}`}
         >
 
             <button type="button" onClick={onClose} className="absolute top-10 cursor-pointer right-3 sm:hidden" aria-label="Close sidebar" title="Close sidebar">

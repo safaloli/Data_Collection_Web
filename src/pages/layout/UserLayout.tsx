@@ -41,7 +41,7 @@ export default function UserLayout({ allowRole }: Readonly<{ allowRole: string |
         }
     }, [])
 
-    const sidebarExpanded = !sidebarCollapsed || (sidebarPeek && !isMobile)
+    const sidebarExpanded = !sidebarCollapsed || sidebarPeek
 
     useEffect(() => {
         if (!loggedInUser) {
@@ -78,7 +78,7 @@ export default function UserLayout({ allowRole }: Readonly<{ allowRole: string |
                 collapsed={sidebarCollapsed}
                 isMobile={isMobile}
                 temporarilyExpanded={sidebarPeek}
-                onTemporaryExpand={() => { if (!isMobile) setSidebarPeek(true) }}
+                onTemporaryExpand={() => setSidebarPeek(true)}
                 onTemporaryCollapse={() => setSidebarPeek(false)}
                 onClose={() => {
                     setSidebarCollapsed(true);
