@@ -56,6 +56,9 @@ export default function LoginForm() {
     }
     return (<>
         <form onSubmit={handleSubmit(submitHandler)} className="space-y-6">
+            <div className="text-xs">
+  API URL: {import.meta.env.VITE_API_URL}
+</div>
             {/* email  */}
             <div className="space-y-1.5">
                 <Label htmlFor="email">EMAIL ADDRESS</Label>
