@@ -14,13 +14,6 @@ import {
 } from "../../components/ui/card";
 
 import {
-    NepalDistrictSelect,
-    NepalLocalSelect,
-    NepalProvinceSelect,
-    NepalWardSelect,
-} from "@itzsa/nepal-geo";
-
-import {
     confirmCitizenImport,
     downloadCitizenImportErrors,
     downloadCitizenImportTemplate,
@@ -59,13 +52,6 @@ export default function CitizenImportPage() {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
-    // Address State
-
-    const [provinceId, setProvinceId] = useState<number | null>(null);
-    const [districtId, setDistrictId] = useState<number | null>(null);
-    const [localId, setLocalId] = useState<number | null>(null);
-    const [wardId, setWardId] = useState<number | null>(null);
-
     // Import State
 
     const [file, setFile] = useState<File | null>(null);
@@ -79,14 +65,6 @@ export default function CitizenImportPage() {
     const [search, setSearch] = useState("");
 
     const [busy, setBusy] = useState(false);
-
-    // Address Object
-    const address = {
-        province_id: provinceId ?? 0,
-        district_id: districtId ?? 0,
-        local_id: localId ?? 0,
-        ward_id: wardId ?? 0,
-    };
 
     // File Selection
     const selectFile = (candidate: File | undefined) => {
@@ -103,12 +81,6 @@ export default function CitizenImportPage() {
 
     // Upload & Preview
     const continueUpload = async () => {
-        if (!provinceId || !districtId || !localId || !wardId) {
-            return toast.error(
-                "Select province, district, municipality, and ward first."
-            );
-        }
-
         if (!file) {
             return toast.error("Choose an Excel file first.");
         }
@@ -116,7 +88,7 @@ export default function CitizenImportPage() {
         setBusy(true);
 
         try {
-            const data = await previewCitizenImport(file, address);
+            const data = await previewCitizenImport(file);
 
             setPreview(data);
         } catch (error) {
@@ -189,6 +161,7 @@ export default function CitizenImportPage() {
         setSearch("");
     };
 
+
     // Render
     return (
         <div className="space-y-6">
@@ -203,8 +176,8 @@ export default function CitizenImportPage() {
                     </h1>
 
                     <p className="mt-1 text-sm text-muted-foreground">
-                        Select the collection address, then preview your
-                        Excel records.
+                        Add address names to each Excel row, then preview your
+                        records.
                     </p>
                 </div>
 
@@ -217,104 +190,18 @@ export default function CitizenImportPage() {
 
             </div>
 
-
-            {/* STEP 1 + STEP 2 */}
+            {/* STEP 1 */}
             {!preview && !result && (
                 <>
-                    {/* Step 1: Address */}
-
                     <Card>
 
                         <CardHeader>
                             <CardTitle className="text-base">
-                                1. Select address
-                            </CardTitle>
-                        </CardHeader>
-
-                        <CardContent>
-
-                            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-
-                                {/* Province */}
-
-                                <NepalProvinceSelect
-                                    label="Province"
-                                    value={provinceId}
-                                    onChange={(value) => {
-                                        setProvinceId(value);
-
-                                        setDistrictId(null);
-                                        setLocalId(null);
-                                        setWardId(null);
-                                    }}
-                                    clearable
-                                />
-
-                                {/* District */}
-
-                                <NepalDistrictSelect
-                                    provinceId={provinceId}
-                                    label="District"
-                                    value={districtId}
-                                    onChange={(value) => {
-                                        setDistrictId(value);
-
-                                        setLocalId(null);
-                                        setWardId(null);
-                                    }}
-                                    disabled={!provinceId}
-                                    clearable
-                                />
-
-                                {/* Municipality */}
-
-                                <NepalLocalSelect
-                                    districtId={districtId}
-                                    label="Municipality"
-                                    value={localId}
-                                    onChange={(value) => {
-                                        setLocalId(value);
-
-                                        setWardId(null);
-                                    }}
-                                    disabled={!districtId}
-                                    clearable
-                                />
-
-                                {/* Ward */}
-
-                                <NepalWardSelect
-                                    localId={localId}
-                                    label="Ward"
-                                    value={wardId}
-                                    onChange={setWardId}
-                                    disabled={!localId}
-                                    clearable
-                                />
-
-                            </div>
-
-                            <p className="mt-3 text-xs text-muted-foreground">
-                                Every imported citizen will be assigned to
-                                this address.
-                            </p>
-
-                        </CardContent>
-
-                    </Card>
-
-                    {/* Step 2: Excel File */}
-                    <Card>
-
-                        <CardHeader>
-                            <CardTitle className="text-base">
-                                2. Choose Excel file
+                                1. Choose Excel file
                             </CardTitle>
                         </CardHeader>
 
                         <CardContent className="space-y-4">
-
-                            {/* Download Template */}
 
                             <Button
                                 variant="outline"
@@ -364,17 +251,10 @@ export default function CitizenImportPage() {
 
                     </Card>
 
-                    {/* Continue */}
                     <Button
                         onClick={continueUpload}
                         isSubmitting={busy}
-                        disabled={
-                            !file ||
-                            !provinceId ||
-                            !districtId ||
-                            !localId ||
-                            !wardId
-                        }
+                        disabled={!file}
                         icon={<Upload />}
                     >
                         Continue to preview

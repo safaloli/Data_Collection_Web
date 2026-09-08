@@ -11,6 +11,8 @@ import UsersPage from "../pages/users/UsersPage";
 import RolesPermissionsPage from "../pages/users/RolesPermissionsPage";
 import ChangePasswordPage from "../pages/auth/ChangePasswordPage";
 import SuperadminOnly from "../pages/users/SuperadminOnly";
+import CitizenReportPage from "../pages/reports/CitizenReportPage";
+import DataSummaryPage from "../pages/reports/DataSummaryPage";
 
 export const adminRouter = [
     {
@@ -25,6 +27,8 @@ export const adminRouter = [
             { path: "citizens/:id", element: <CitizenDetailsPage /> },
 
             { path: "citizens/import", element: <CitizenImportPage /> },
+            { path: "reports/citizen-report", element: <CitizenReportPage /> },
+            { path: "reports/data-summary", element: <DataSummaryPage /> },
             { path: "users", element: <SuperadminOnly><UsersPage /></SuperadminOnly> },
             { path: "roles-permissions", element: <SuperadminOnly><RolesPermissionsPage /></SuperadminOnly> },
             { path: "change-password", element: <ChangePasswordPage /> },

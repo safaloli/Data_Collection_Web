@@ -35,6 +35,8 @@ export const CreateCitizenDTO = z.object({
             }
         ),
 
+    gender: z.union([z.enum(["MALE", "FEMALE", "OTHER"]), z.literal("")]).optional().nullable(),
+
     // Address
     // province_id: z
     //     .number({
@@ -115,6 +117,7 @@ export interface CitizenType {
     name?: string;
     phone?: string;
     dob?: string | null;
+    gender?: "MALE" | "FEMALE" | "OTHER" | null;
     province_id: number;
     district_id: number;
     local_id: number;
@@ -123,6 +126,13 @@ export interface CitizenType {
     father_phone?: string | null;
     mother_name?: string | null;
     mother_phone?: string | null;
+    source?: "SINGLE_ENTRY" | "IMPORT";
+    created_by?: string | null;
+    updated_by?: string | null;
+    createdAt?: string;
+    updatedAt?: string;
+    createdBy?: { id: string; name: string; email: string } | null;
+    updatedBy?: { id: string; name: string; email: string } | null;
 }
 
 export interface CitizensApiResponse {

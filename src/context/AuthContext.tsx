@@ -17,11 +17,13 @@ export interface IAuthContext {
     loginUser: (data: ICredentials) => Promise<IUser | void | undefined>,
     getLoggedInUser: () => Promise<IUser | void | undefined>,
     setLoggedInUser: (user: IUser | null | undefined) => void,
+    handleLogout: () => void,
 }
 
 export const AuthContext = createContext<IAuthContext>({
     loggedInUser: null,
     loginUser: async (): Promise<void> => { },
     getLoggedInUser: async (): Promise<IUser | undefined | void> => { },
-    setLoggedInUser: () => { }
+    setLoggedInUser: () => { },
+    handleLogout: () => { }
 })

@@ -15,6 +15,7 @@ import type { CitizenType } from "./types/Citizen.types";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
 import { formatDate } from "../../utils/helpers";
+import PageSkeleton from "../../components/ui/PageSkeleton";
 
 export default function CitizenDetailsPage() {
     const { id } = useParams();
@@ -35,7 +36,7 @@ export default function CitizenDetailsPage() {
     }, [citizenQuery.isError]);
 
     if (citizenQuery.isLoading) {
-        return <p className="text-sm text-muted-foreground">Loading citizen...</p>;
+        return <PageSkeleton detail />;
     }
 
     if (citizenQuery.isError || !citizenQuery.data) {
@@ -82,6 +83,7 @@ export default function CitizenDetailsPage() {
                         <Detail label="Name" value={citizen.name} />
                         <Detail label="Phone" value={citizen.phone} />
                         <Detail label="Date of birth" value={formatDate(citizen.dob)} />
+                        <Detail label="Gender" value={citizen.gender ? citizen.gender.charAt(0) + citizen.gender.slice(1).toLowerCase() : null} />
                     </CardContent>
                 </Card>
 
@@ -102,6 +104,16 @@ export default function CitizenDetailsPage() {
                         <Detail label="Father phone" value={citizen.father_phone} />
                         <Detail label="Mother" value={citizen.mother_name} />
                         <Detail label="Mother phone" value={citizen.mother_phone} />
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardHeader><CardTitle className="text-base">Collection tracking</CardTitle></CardHeader>
+                    <CardContent className="grid gap-4 sm:grid-cols-2">
+                        <Detail label="Source" value={citizen.source === "IMPORT" ? "Excel import" : "Single entry"} />
+                        <Detail label="Added by" value={citizen.createdBy ? `${citizen.createdBy.name} (${citizen.createdBy.id})` : citizen.created_by} />
+                        <Detail label="Last edited by" value={citizen.updatedBy ? `${citizen.updatedBy.name} (${citizen.updatedBy.id})` : citizen.updated_by} />
+                        <Detail label="Added on" value={citizen.createdAt ? new Date(citizen.createdAt).toLocaleString() : null} />
                     </CardContent>
                 </Card>
             </div>

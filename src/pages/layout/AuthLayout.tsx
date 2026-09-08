@@ -1,8 +1,22 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import AuthFooter from "../../components/auth/AuthFooter";
 import AuthHeader from "../../components/auth/AuthHeader";
+import { useAuth } from "@/hooks/useAuth";
+import { useEffect } from "react";
 
 export default function AuthLayout() {
+    const { loggedInUser } = useAuth()
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        console.log("User", loggedInUser?.role)
+
+        if (loggedInUser) {
+
+            // already logged in 
+            navigate("/", {replace: true})
+        }
+    }, [loggedInUser, navigate])
     return (<>
         <div className="bg-background font-body text-on-surface antialiased min-h-screen flex flex-col">
             {/* TopNavBar - Rendered based on JSON guidance for EduPremium/EduSynth Context */}

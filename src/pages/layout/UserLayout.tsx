@@ -5,11 +5,16 @@ import DashboardHeader from "../../components/dashboard/DashboardHeader";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { UserRoles } from "../../utils/constants";
+import { toast } from "sonner";
+import Cookies from "js-cookie";
+import AppConfig from "@/config/app.config";
 
 export default function UserLayout({ allowRole }: Readonly<{ allowRole: string | string[] }>) {
-    const { loggedInUser } = useAuth()
-    const navigate = useNavigate()
+    const { loggedInUser, handleLogout } = useAuth();
+    const navigate = useNavigate();
 
+    
+    
     const [isMobile, setIsMobile] = useState(() =>
         window.matchMedia("(max-width: 1023px)").matches
     )
@@ -18,46 +23,78 @@ export default function UserLayout({ allowRole }: Readonly<{ allowRole: string |
         window.matchMedia("(max-width: 1023px)").matches
     )
 
-    const [sidebarPeek, setSidebarPeek] = useState(false)
+const [sidebarPeek, setSidebarPeek] = useState(false)
 
+    // sidebar handle
     useEffect(() => {
         const mediaQuery = window.matchMedia("(max-width: 1023px)")
-
+        
         const handleMediaChange = () => {
             const mobile = mediaQuery.matches
-
+            
             setIsMobile(mobile)
             setSidebarPeek(false)
 
-            if (mobile) {
-                setSidebarCollapsed(true)
+                if (mobile) {
+                    setSidebarCollapsed(true)
+                }
             }
-        }
 
-        mediaQuery.addEventListener("change", handleMediaChange)
+            mediaQuery.addEventListener("change", handleMediaChange)
 
-        return () => {
-            mediaQuery.removeEventListener("change", handleMediaChange)
-        }
-    }, [])
+            return () => {
+                mediaQuery.removeEventListener("change", handleMediaChange)
+            }
+        }, [])
 
     const sidebarExpanded = !sidebarCollapsed || sidebarPeek
-
+    
+    // auth handle
     useEffect(() => {
-        if (!loggedInUser) {
-            // login first
-            navigate("/login")
-        }
-        if (loggedInUser?.role === UserRoles.SUPERADMIN) {
-        } else if (
-            loggedInUser?.role !== allowRole ||
-            !allowRole.includes(loggedInUser?.role)
-        ) {
-            console.log('access denied', allowRole, loggedInUser?.role)
-            // access denied
-            navigate(`/login`)
-        }
-    }, [])
+        const checkAuthentication = async () => {
+            // User is not loaded/authenticated
+            if (!loggedInUser) {
+                 toast.error("Authentication required", {
+                    description: "Please login to continue.",
+                });
+                navigate("/login", { replace: true });
+                return;
+            }
+    
+            // Check access token
+            const token = Cookies.get(AppConfig.accessToken);
+    
+            if (!token) {
+                 toast.error("Session expired", {
+                    description: "Please login again to continue.",
+                });
+    
+                handleLogout()
+    
+                navigate("/login", { replace: true });
+                return;
+            }
+    
+            // Super admin
+            if (loggedInUser.role === UserRoles.SUPERADMIN) {
+                return;
+            }
+    
+            // Role authorization
+            if (!allowRole.includes(loggedInUser.role)) {
+                 toast.error("Access denied", {
+                    description: "You do not have permission to access this page.",
+                });
+    
+                await handleLogout()
+    
+                navigate("/login", { replace: true });
+                return;
+            }
+        };
+    
+        checkAuthentication();
+    }, [loggedInUser, allowRole, navigate]);
 
     return (<>
         <div className="bg-background text-foreground font-inter min-h-screen">

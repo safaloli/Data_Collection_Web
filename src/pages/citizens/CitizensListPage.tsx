@@ -27,6 +27,7 @@ import type { CitizensApiResponse, CitizenType, DisplayCitizen } from "./types/C
 import { LinkButton } from "../../components/ui/Link";
 import { DataTable } from "../../components/table/data-table";
 import { citizenColumn } from "../../components/citizens/CitizenTableColumn";
+import PageSkeleton from "../../components/ui/PageSkeleton";
 
 
 
@@ -62,7 +63,7 @@ const normalizeCitizen = (item: CitizenType): DisplayCitizen => {
 
 
 export default function CitizenListPage() {
-    const { data: citizens = [] } = useQuery({
+    const citizensQuery = useQuery({
         queryKey: ["citizens"],
         queryFn: async (): Promise<DisplayCitizen[]> => {
             const response = (await axiosInstance.get("/citizens/all")) as CitizensApiResponse | CitizenType[] | null;
@@ -75,6 +76,7 @@ export default function CitizenListPage() {
             return list.map(normalizeCitizen);
         },
     });
+    const { data: citizens = [] } = citizensQuery;
 
     const [provinceId, setProvinceId] = useState<number | null>(null);
     const [districtId, setDistrictId] = useState<number | null>(null);
@@ -84,6 +86,8 @@ export default function CitizenListPage() {
     const [page, setPage] = useState(1);
 
     const limit = 10;
+
+    if (citizensQuery.isLoading) return <PageSkeleton cards={3} rows={8} />;
 
     const selectedProvinceName = provinceId ? getProvinceById(provinceId)?.nameEn ?? "" : "";
     const selectedDistrictName = districtId ? getDistrictById(districtId)?.nameEn ?? "" : "";

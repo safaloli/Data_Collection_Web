@@ -15,6 +15,7 @@ import MaterialIcon from "../../assets/icons/MaterialIcon";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Input } from "../ui/input";
+import PageSkeleton from "../ui/PageSkeleton";
 import axiosInstance from "../../config/axios.config";
 import { CreateCitizenDTO, type CitizenType, type CreateCitizenFormType } from "../../pages/citizens/types/Citizen.types";
 
@@ -32,6 +33,7 @@ export default function CitizenForm() {
 
     const {
         control,
+        register,
         handleSubmit,
         reset,
         formState: { isSubmitting },
@@ -41,6 +43,7 @@ export default function CitizenForm() {
             name: "",
             phone: "",
             dob: "",
+            gender: undefined,
             father_name: "",
             father_phone: "",
             mother_name: "",
@@ -66,6 +69,7 @@ export default function CitizenForm() {
             name: citizen.name ?? "",
             phone: citizen.phone ?? "",
             dob: citizen.dob ?? "",
+            gender: citizen.gender ?? undefined,
             father_name: citizen.father_name ?? "",
             father_phone: citizen.father_phone ?? "",
             mother_name: citizen.mother_name ?? "",
@@ -87,6 +91,7 @@ export default function CitizenForm() {
             name: data.name.trim(),
             phone: data.phone.trim(),
             dob: data.dob || null,
+            gender: data.gender || null,
             province_id: Number(provinceId),
             district_id: Number(districtId),
             local_id: Number(localId),
@@ -115,7 +120,7 @@ export default function CitizenForm() {
     };
 
     if (isEditMode && citizenQuery.isLoading) {
-        return <p className="text-sm text-muted-foreground">Loading citizen...</p>;
+        return <PageSkeleton detail />;
     }
 
     if (isEditMode && (citizenQuery.isError || !citizenQuery.data)) {
@@ -150,6 +155,16 @@ export default function CitizenForm() {
                     <div className="space-y-2 md:col-span-2">
                         <label className="text-sm font-medium">Date of Birth</label>
                         <Input name="dob" control={control} type="date" />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">Gender</label>
+                        <select {...register("gender")} className="border-input bg-background ring-offset-background focus-visible:ring-ring h-10 w-full rounded-md border px-3 text-sm focus-visible:outline-none focus-visible:ring-2">
+                            <option value="">Prefer not to say</option>
+                            <option value="MALE">Male</option>
+                            <option value="FEMALE">Female</option>
+                            <option value="OTHER">Other</option>
+                        </select>
                     </div>
                 </CardContent>
             </Card>

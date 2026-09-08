@@ -340,16 +340,11 @@ export default function UsersPage() {
 
                             <tbody>
                                 {/* Loading */}
-                                {usersQuery.isLoading && (
-                                    <tr>
-                                        <td
-                                            className="p-4"
-                                            colSpan={5}
-                                        >
-                                            Loading users...
-                                        </td>
+                                {usersQuery.isLoading && Array.from({ length: 5 }, (_, index) => (
+                                    <tr className="animate-pulse border-b last:border-0" key={`loading-${index}`}>
+                                        {Array.from({ length: 5 }, (_, cellIndex) => <td className="p-3" key={cellIndex}><div className="h-5 rounded bg-muted" /></td>)}
                                     </tr>
-                                )}
+                                ))}
 
                                 {/* Error */}
                                 {usersQuery.isError && (
