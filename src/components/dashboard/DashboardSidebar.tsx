@@ -91,9 +91,16 @@ export default function DashboardSidebar({
                 <X className="size-5" />
             </button>
             <div className="px-4 py-6 flex items-center gap-3">
-                <div className={expanded ? "" : "hidden"}>
-                    <h2 className="text-lg font-extrabold text-indigo-600 dark:text-indigo-400">Jan Data</h2>
-                    <p className="text-xs! font-medium tracking-widest uppercase">Admin Portal</p>
+                <div className={expanded ? "flex items-center gap-3" : "hidden"}>
+                    <img
+                        src="/favicon.svg"
+                        alt="Jan Data logo"
+                        className="h-9 w-9 rounded-full object-cover ring-2 ring-indigo-100 dark:ring-indigo-900/60 shadow-sm"
+                    />
+                    <div>
+                        <h2 className="text-lg font-extrabold text-indigo-600 dark:text-indigo-400">Jan Data</h2>
+                        <p className="text-xs! font-medium tracking-widest uppercase">Admin Portal</p>
+                    </div>
                 </div>
             </div>
 
