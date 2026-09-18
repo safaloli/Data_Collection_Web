@@ -37,7 +37,7 @@ export interface DataSummary {
     totals: { total_citizens: number; single_entries: number; import_files: number; imported_citizens: number; total_admins: number; active_collectors: number };
     users: SummaryUser[];
     imports: { total_files: number; imported_citizens: number; failed: number; history: SummaryImport[] };
-    recent: { id: string; user_name: string; user_role: string; action: string; source: string; citizen_id: string; import_job_id?: string | null; created_at: string; changed_fields: string[] }[];
+    recent: { id: string; user_name: string; user_role: string; action: string; source: string; citizen_id: string; import_job_id?: string | null; imported_count?: number; created_at: string; changed_fields: string[] }[];
 }
 
 export const getCitizenReport = async (): Promise<CitizenReport> => {
