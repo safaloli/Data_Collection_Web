@@ -203,6 +203,18 @@ export default function CitizenImportPage() {
 
                         <CardContent className="space-y-4">
 
+                            <div className="rounded-lg border border-dashed bg-muted/30 p-4 text-sm">
+                                <p className="font-medium">Import address rules</p>
+                                <ul className="mt-2 list-disc space-y-1 pl-5 text-muted-foreground">
+                                    <li>Required columns: Name, Phone, and Province.</li>
+                                    <li>Use either District, Municipality, and Ward columns, or one Address column.</li>
+                                    <li>Priority: Province, District, Municipality, and Ward columns are higher priority than Address. Address is used only to fill missing District, Municipality, or Ward values.</li>
+                                    <li>For Address imports, use: <span className="font-medium text-foreground">local details, Municipality, District</span>.</li>
+                                    <li>The first number in the local details is used as the ward number. Example: <span className="font-medium text-foreground">Tulsipur 7 Ganeshpur, Tulsipur (Sub-Metropolitan City), Dang</span>.</li>
+                                    <li>Text inside municipality brackets is ignored. If no ward number is found, the row is invalid.</li>
+                                </ul>
+                            </div>
+
                             <Button
                                 variant="outline"
                                 onClick={async () => {

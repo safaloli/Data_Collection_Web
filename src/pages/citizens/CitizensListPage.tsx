@@ -66,7 +66,7 @@ export default function CitizenListPage() {
     const citizensQuery = useQuery({
         queryKey: ["citizens"],
         queryFn: async (): Promise<DisplayCitizen[]> => {
-            const response = (await axiosInstance.get("/citizens/all")) as CitizensApiResponse | CitizenType[] | null;
+            const response = (await axiosInstance.get("/citizens/all", { params: { limit: 10 } })) as CitizensApiResponse | CitizenType[] | null;
             const list = Array.isArray(response)
                 ? response
                 : Array.isArray(response?.data)
@@ -86,8 +86,6 @@ export default function CitizenListPage() {
     const [page, setPage] = useState(1);
 
     const limit = 10;
-
-    if (citizensQuery.isLoading) return <PageSkeleton cards={3} rows={8} />;
 
     const selectedProvinceName = provinceId ? getProvinceById(provinceId)?.nameEn ?? "" : "";
     const selectedDistrictName = districtId ? getDistrictById(districtId)?.nameEn ?? "" : "";
@@ -149,6 +147,8 @@ export default function CitizenListPage() {
         districtId !== null ||
         localId !== null ||
         wardId !== null;
+
+    if (citizensQuery.isLoading) return <PageSkeleton cards={3} rows={8} />;
 
     return (
         <div className="space-y-6">
