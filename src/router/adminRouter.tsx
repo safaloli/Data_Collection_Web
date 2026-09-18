@@ -13,6 +13,7 @@ import ChangePasswordPage from "../pages/auth/ChangePasswordPage";
 import SuperadminOnly from "../pages/users/SuperadminOnly";
 import CitizenReportPage from "../pages/reports/CitizenReportPage";
 import DataSummaryPage from "../pages/reports/DataSummaryPage";
+import ImportDetailsPage from "../pages/reports/ImportDetailsPage";
 
 export const adminRouter = [
     {
@@ -29,6 +30,7 @@ export const adminRouter = [
             { path: "citizens/import", element: <CitizenImportPage /> },
             { path: "reports/citizen-report", element: <CitizenReportPage /> },
             { path: "reports/data-summary", element: <DataSummaryPage /> },
+            { path: "reports/imports/:importJobId", element: <ImportDetailsPage /> },
             { path: "users", element: <SuperadminOnly><UsersPage /></SuperadminOnly> },
             { path: "roles-permissions", element: <SuperadminOnly><RolesPermissionsPage /></SuperadminOnly> },
             { path: "change-password", element: <ChangePasswordPage /> },

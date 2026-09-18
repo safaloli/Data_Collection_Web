@@ -33,11 +33,33 @@ export interface SummaryImport {
     status: string;
 }
 
+export interface ImportDetails {
+    id: string;
+    file_name: string;
+    created_by: string;
+    total_rows: number;
+    imported_rows: number;
+    skipped_rows?: number;
+    failed_rows: number;
+    invalid_rows: number;
+    createdAt: string;
+    status: string;
+}
+
 export interface DataSummary {
     totals: { total_citizens: number; single_entries: number; import_files: number; imported_citizens: number; total_admins: number; active_collectors: number };
     users: SummaryUser[];
     imports: { total_files: number; imported_citizens: number; failed: number; history: SummaryImport[] };
     recent: { id: string; user_name: string; user_role: string; action: string; source: string; citizen_id: string; import_job_id?: string | null; imported_count?: number; created_at: string; changed_fields: string[] }[];
+}
+
+export interface ImportHistoryRow {
+    id: string;
+    row_number: number;
+    status: string;
+    raw_data: Record<string, unknown>;
+    normalized_data: Record<string, unknown>;
+    errors: { field: string; message: string }[];
 }
 
 export const getCitizenReport = async (): Promise<CitizenReport> => {
@@ -48,4 +70,14 @@ export const getCitizenReport = async (): Promise<CitizenReport> => {
 export const getDataSummary = async (params: Record<string, string>): Promise<DataSummary> => {
     const response = await axiosInstance.get("/reports/summary", { params });
     return (response as { data: DataSummary }).data;
+};
+
+export const getImportRows = async (importJobId: string): Promise<ImportHistoryRow[]> => {
+    const response = await axiosInstance.get(`/citizens/imports/${importJobId}/rows`, { params: { limit: "100" } });
+    return (response as { data: { items: ImportHistoryRow[] } }).data.items;
+};
+
+export const getImportDetails = async (importJobId: string): Promise<ImportDetails> => {
+    const response = await axiosInstance.get(`/citizens/imports/${importJobId}`);
+    return (response as { data: ImportDetails }).data;
 };
