@@ -1,4 +1,5 @@
 import * as z from "zod";
+import NepaliDate from "nepali-date-converter";
 
 const phonePattern = /^\d{7,15}$/;
 
@@ -25,13 +26,25 @@ export const CreateCitizenDTO = z.object({
             (value) => {
                 if (!value) return true;
 
-                const date = new Date(value);
+                const match = /^(\d{2})[\/-](\d{2})[\/-](\d{4})$/.exec(value);
+                if (!match) return false;
+
+                let date: Date;
+                try {
+                    const nepaliDate = new NepaliDate(`${match[2]}/${match[1]}/${match[3]}`);
+                    const bs = nepaliDate.getBS();
+                    if (bs.year !== Number(match[3]) || bs.month !== Number(match[1]) - 1 || bs.date !== Number(match[2])) return false;
+                    const ad = nepaliDate.getAD();
+                    date = new Date(ad.year, ad.month, ad.date);
+                } catch {
+                    return false;
+                }
                 const today = new Date();
 
-                return !isNaN(date.getTime()) && date <= today;
+                return date <= today;
             },
             {
-                message: "Date of birth cannot be in the future.",
+                message: "Date of birth must be a valid past Nepali date in MM/DD/YYYY format.",
             }
         ),
 

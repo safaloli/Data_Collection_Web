@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useController, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -17,8 +17,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Input } from "../ui/input";
 import PageSkeleton from "../ui/PageSkeleton";
 import axiosInstance from "../../config/axios.config";
+import { toDateInputValue } from "../../utils/helpers";
 import { CreateCitizenDTO, type CitizenType, type CreateCitizenFormType } from "../../pages/citizens/types/Citizen.types";
 
+function formatDobInput(value: string) {
+    const digits = value.replace(/\D/g, "").slice(0, 8);
+    if (digits.length <= 2) return digits;
+    if (digits.length <= 4) return `${digits.slice(0, 2)}/${digits.slice(2)}`;
+    return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
+}
 
 
 export default function CitizenForm() {
@@ -50,6 +57,7 @@ export default function CitizenForm() {
             mother_phone: "",
         },
     });
+    const { field: dobField } = useController({ name: "dob", control });
 
     const citizenQuery = useQuery({
         queryKey: ["citizen", id],
@@ -68,7 +76,7 @@ export default function CitizenForm() {
         reset({
             name: citizen.name ?? "",
             phone: citizen.phone ?? "",
-            dob: citizen.dob ?? "",
+            dob: toDateInputValue(citizen.dob),
             gender: citizen.gender ?? undefined,
             father_name: citizen.father_name ?? "",
             father_phone: citizen.father_phone ?? "",
@@ -153,8 +161,17 @@ export default function CitizenForm() {
                     </div>
 
                     <div className="space-y-2 md:col-span-2">
-                        <label className="text-sm font-medium">Date of Birth</label>
-                        <Input name="dob" control={control} type="date" />
+                        <label className="text-sm font-medium">Date of Birth (BS)</label>
+                        <Input
+                            name="dob"
+                            control={control}
+                            type="text"
+                            placeholder="MM/DD/YYYY (BS)"
+                            inputMode="numeric"
+                            onChange={(event) => {
+                                dobField.onChange(formatDobInput(event.target.value));
+                            }}
+                        />
                     </div>
 
                     <div className="space-y-2">
