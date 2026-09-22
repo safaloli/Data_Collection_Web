@@ -423,7 +423,7 @@ function LatestImport({
 
                 <div className="mt-4 flex flex-wrap gap-2">
                     <Link
-                        to={`/ reports / imports / ${latest.id} `}
+                        to={`/reports/imports/${latest.id}`}
                     >
                         <Button
                             variant="outline"
