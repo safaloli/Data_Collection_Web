@@ -55,7 +55,7 @@ export default function CitizenDetailsPage() {
     const province = getProvinceById(citizen.province_id)?.nameEn ?? "";
     const district = getDistrictById(citizen.district_id)?.nameEn ?? "";
     const municipality = getLocalLevelById(citizen.local_id)?.nameEn ?? "";
-    const ward = decodeWardId(citizen.ward_id).number ?? "";
+    const ward = citizen.ward_id ? decodeWardId(citizen.ward_id).number : null;
 
     return (
         <div className="space-y-6">

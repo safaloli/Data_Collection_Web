@@ -134,7 +134,7 @@ export interface CitizenType {
     province_id: number;
     district_id: number;
     local_id: number;
-    ward_id: number;
+    ward_id: number | null;
     father_name?: string | null;
     father_phone?: string | null;
     mother_name?: string | null;
@@ -163,7 +163,7 @@ export interface DisplayCitizen {
         province: string;
         district: string;
         municipality: string;
-        wardNo: number;
+        wardNo: number | null;
     };
     father: {
         name?: string;

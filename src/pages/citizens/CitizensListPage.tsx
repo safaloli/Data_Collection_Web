@@ -35,7 +35,7 @@ const normalizeCitizen = (item: CitizenType): DisplayCitizen => {
     const province = item.province_id ? getProvinceById(item.province_id)?.nameEn ?? "" : "";
     const district = item.district_id ? getDistrictById(item.district_id)?.nameEn ?? "" : "";
     const municipality = item.local_id ? getLocalLevelById(item.local_id)?.nameEn ?? "" : "";
-    const wardNo = decodeWardId(item.ward_id).number ?? 0;
+    const wardNo = item.ward_id ? decodeWardId(item.ward_id).number ?? null : null;
 
     return {
         id: item.id ?? "",
@@ -109,7 +109,8 @@ export default function CitizenListPage() {
 
             const matchesWard =
                 !wardId ||
-                citizen.address.wardNo.toString() === selectedWardNumber?.toString();
+                (citizen.address.wardNo !== null &&
+                    citizen.address.wardNo.toString() === selectedWardNumber?.toString());
 
             return (
                 matchesProvince &&

@@ -208,11 +208,11 @@ export default function CitizenImportPage() {
                                 <ul className="mt-2 list-disc space-y-1 pl-5 text-muted-foreground">
                                     <li>Required columns: Name, Province, and one phone source: Phone, Father Phone, Mother Phone, or Emergency Contact.</li>
                                     <li>Phone priority: Phone, then Father Phone, then Mother Phone, then the first number from Emergency Contact.</li>
-                                    <li>Use either District, Municipality, and Ward columns, or one Address column.</li>
+                                    <li>Use either District and Municipality columns, or one Address column. Ward is optional.</li>
                                     <li>Priority: Province, District, Municipality, and Ward columns are higher priority than Address. Address is used only to fill missing District, Municipality, or Ward values.</li>
                                     <li>For Address imports, use: <span className="font-medium text-foreground">local details, Municipality, District</span>.</li>
                                     <li>The first number in the local details is used as the ward number. Example: <span className="font-medium text-foreground">Tulsipur 7 Ganeshpur, Tulsipur (Sub-Metropolitan City), Dang</span>.</li>
-                                    <li>Text inside municipality brackets is ignored. If no ward number is found, the row is invalid.</li>
+                                    <li>Text inside municipality brackets is ignored. If a ward is provided, it must belong to the selected municipality.</li>
                                 </ul>
                             </div>
 

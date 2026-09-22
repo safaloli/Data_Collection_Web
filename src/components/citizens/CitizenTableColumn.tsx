@@ -184,7 +184,7 @@ export const citizenColumn = columnHelper.columns([
                             {citizen.address.province}, {citizen.address.district}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                            {citizen.address.municipality} · Ward {citizen.address.wardNo}
+                            {citizen.address.municipality}{citizen.address.wardNo ? ` · Ward ${citizen.address.wardNo}` : ""}
                         </p>
                     </div>
                 </div>

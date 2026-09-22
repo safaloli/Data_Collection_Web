@@ -90,7 +90,7 @@ export default function CitizenForm() {
     }, [citizenQuery.data, reset]);
 
     const submitHandler = async (data: CreateCitizenFormType) => {
-        if (!provinceId || !districtId || !localId || !wardId) {
+        if (!provinceId || !districtId || !localId) {
             toast.error("Please select a complete address.");
             return;
         }
@@ -103,7 +103,7 @@ export default function CitizenForm() {
             province_id: Number(provinceId),
             district_id: Number(districtId),
             local_id: Number(localId),
-            ward_id: Number(wardId),
+            ward_id: wardId ? Number(wardId) : null,
             father_name: data.father_name?.trim() || null,
             father_phone: data.father_phone?.trim() || null,
             mother_name: data.mother_name?.trim() || null,
@@ -239,7 +239,7 @@ export default function CitizenForm() {
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium">Ward</label>
+                        <label className="text-sm font-medium">Ward (optional)</label>
                         <NepalWardSelect
                             localId={localId}
                             value={wardId}
